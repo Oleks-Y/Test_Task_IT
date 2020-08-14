@@ -18,6 +18,7 @@ namespace Test_Task_IT
     {
         private readonly SQlDataAccess _db;
         private string TableName;
+       
         public Form1()
         {
             InitializeComponent();
@@ -36,32 +37,91 @@ namespace Test_Task_IT
             
             // Setup
             SetupLayout();
+            SetupCheckboxes();
             
+        }
+
+        private void SetupCheckboxes()
+        {
+            var groupColumnsAllowed = ConfigurationManager.AppSettings.Get("columns_groupby");
+            var sumColumnsAllowed = ConfigurationManager.AppSettings.Get("columns_sum_by");
+            string[] group_names = groupColumnsAllowed.Split(',');
+            string[] sum_names = sumColumnsAllowed.Split(',');
+            int location_Y = 0;
+            foreach(var name in group_names)
+            {
+                this.CheckBoxesPanel.Controls.Add(new CheckBox() { Text = name, Location = new Point(0,location_Y) });
+                location_Y += 30;
+            }
+            location_Y = 0;
+            foreach (var name in sum_names)
+            {
+                this.SumByCheckBoxesPanel.Controls.Add(new CheckBox() { Text = name, Location = new Point(0, location_Y) });
+                location_Y += 30;
+            }
         }
 
         private void SetupLayout()
         {
-            
+                       
+            var table = _db.SelectAllQuery(TableName);
+
+            WriteLayout(table);
+
+        }
+        private void WriteLayout(Table table)
+        {
+            this.Table.Columns.Clear();
+            this.Table.Rows.Clear();
+
             this.Table.ColumnHeadersDefaultCellStyle
                 .BackColor = Color.Navy;
             this.Table.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
             
-            var table = _db.SelectAllQuery(TableName);
 
             foreach (var column in table.Columns)
             {
-                this.Table.Columns.Add(new DataGridViewTextBoxColumn() {Name = column.Name});
+
+                this.Table.Columns.Add(new DataGridViewTextBoxColumn() { Name = column.Name });
+
             }
 
             foreach (var row in table.Data)
             {
                 this.Table.Rows.Add(row.ToArray());
             }
+        }
+        private void Reset_Button_Click(object sender, EventArgs e)
+        {
+            SetupLayout();
+        }
+
+        private void SubmitButton_Click(object sender, EventArgs e)
+        {
+            List<string> group_by = new List<string>();
+            List<string> sum_by = new List<string>();
+            foreach(var checkBox in CheckBoxesPanel.Controls)
+            {
+                var check = (CheckBox)checkBox;
+                if (check.Checked)
+                {
+                    group_by.Add(check.Text);
+                }
+            }
+            foreach (var checkBox in SumByCheckBoxesPanel.Controls)
+            {
+                var check = (CheckBox)checkBox;
+                if (check.Checked)
+                {
+                    sum_by.Add(check.Text);
+                }
+            }
+
+            // Query here 
+            var table = _db.SelectGrouped(group_by, sum_by, TableName);
+            WriteLayout(table);
 
         }
-        
-        
-
-       
     }
 }

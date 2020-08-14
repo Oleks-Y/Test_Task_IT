@@ -7,21 +7,18 @@ namespace Test_Task_IT.DataAccess.Models
     {
         public string Name { get; set; }
         public List<Column> Columns { get; set; }
-        public List<List<string>> Data { get; set; }
+        public List<string[]> Data { get; set; }
 
         public Table()
         {
             Columns = new List<Column>();
-            Data = new List<List<string>>();
+            Data = new List<string[]>();
         }
         public Table(int columnsCount)
         {
             Columns = new List<Column>();
-            Data = new List<List<string>>();
-            for (int i = 0; i < columnsCount; i++)
-            {
-                Data.Add( new List<string>());
-            }
+            Data = new List<string[]>();
+           
         }
     }
 }

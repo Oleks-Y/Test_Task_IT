@@ -23,6 +23,8 @@ namespace Test_Task_IT.DataAccess
                     _connection.Open();
 
                     var result = cmd.ExecuteScalar();
+
+                     _connection.Close();
             }
         }
 
@@ -44,14 +46,17 @@ namespace Test_Task_IT.DataAccess
                     while (reader.Read())
                     {
                         int k = 0;
-                        
+                        string[] row = new string[reader.VisibleFieldCount];
                         foreach (var col in table.Columns)
                         {
-                            table.Data[k].Add(reader[col.Name].ToString());
+                            var item = reader[col.Name].ToString();
+                            row[k] = item;
                             k++;
                         }
+                        table.Data.Add(row);
                     }
 
+                    _connection.Close();
                     return table;
 
                 }
@@ -70,6 +75,17 @@ namespace Test_Task_IT.DataAccess
             return ExecuteQueryResult($"SELECT * FROM {tableName}");
         }
 
+        public Table SelectGrouped(List<string> groupBy, List<string> sumBy, string tableName)
+        {
+            // TODO 
+            // Check if arrays null
+            // in Different cases will be diffent queries
+            var sumByFormated = sumBy.Select(s => $"SUM({s})");
+            return ExecuteQueryResult($@"SELECT {string.Join(",", groupBy)}, {string.Join(",", sumByFormated)}
+                                        FROM {tableName}    
+                                        GROUP BY {string.Join(",", groupBy)};
+                                        ");
+        } 
 
     }
 }
