@@ -1,0 +1,5 @@
+C:\Users\User\RiderProjects\Test_Task_IT\Test_Task_IT.DataAccess\bin\Debug\Test_Task_IT.DataAccess.dll
+C:\Users\User\RiderProjects\Test_Task_IT\Test_Task_IT.DataAccess\bin\Debug\Test_Task_IT.DataAccess.pdb
+C:\Users\User\RiderProjects\Test_Task_IT\Test_Task_IT.DataAccess\obj\Debug\Test_Task_IT.DataAccess.csprojAssemblyReference.cache
+C:\Users\User\RiderProjects\Test_Task_IT\Test_Task_IT.DataAccess\obj\Debug\Test_Task_IT.DataAccess.dll
+C:\Users\User\RiderProjects\Test_Task_IT\Test_Task_IT.DataAccess\obj\Debug\Test_Task_IT.DataAccess.pdb
