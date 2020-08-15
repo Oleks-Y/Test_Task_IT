@@ -63,9 +63,19 @@ namespace Test_Task_IT
 
         private void SetupLayout()
         {
-                       
-            var table = _db.SelectAllQuery(TableName);
 
+            Table table = new Table();
+            try
+            {
+                table = _db.SelectAllQuery(TableName);
+            }
+            catch(SqlException e)
+            {
+                MessageBox.Show("Invalid table name", "Error", MessageBoxButtons.OK);
+                this.Dispose();
+
+            }
+            
             WriteLayout(table);
 
         }
@@ -124,7 +134,17 @@ namespace Test_Task_IT
             }
 
             // Query here 
-            var table = _db.SelectGrouped(group_by, sum_by, TableName);
+            Table table = new Table();
+            try
+            {
+                table = _db.SelectGrouped(group_by, sum_by, TableName);
+            }
+            catch(SqlException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK);
+
+            }
+
             WriteLayout(table);
 
         }
