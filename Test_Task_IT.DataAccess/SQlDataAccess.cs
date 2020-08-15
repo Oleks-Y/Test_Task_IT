@@ -80,7 +80,22 @@ namespace Test_Task_IT.DataAccess
             // TODO 
             // Check if arrays null
             // in Different cases will be diffent queries
-            var sumByFormated = sumBy.Select(s => $"SUM({s})");
+            if(sumBy.Count == 0)
+            {
+                return ExecuteQueryResult($@"SELECT {string.Join(",", groupBy)}
+                                        FROM {tableName}    
+                                        GROUP BY {string.Join(",", groupBy)};
+                                        ");
+            }
+            var sumByFormated = sumBy.Select(s => $"SUM({s}) AS {s}");
+
+            if (groupBy.Count == 0)
+            {
+                return ExecuteQueryResult($@"SELECT  {string.Join(",", sumByFormated)}
+                                            FROM {tableName};
+                                            ");
+            }
+            
             return ExecuteQueryResult($@"SELECT {string.Join(",", groupBy)}, {string.Join(",", sumByFormated)}
                                         FROM {tableName}    
                                         GROUP BY {string.Join(",", groupBy)};

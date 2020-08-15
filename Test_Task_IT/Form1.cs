@@ -117,6 +117,11 @@ namespace Test_Task_IT
                     sum_by.Add(check.Text);
                 }
             }
+            if(group_by.Count == 0 && sum_by.Count == 0)
+            {
+                MessageBox.Show("You must choose one option!", "Error", MessageBoxButtons.OK);
+                return;
+            }
 
             // Query here 
             var table = _db.SelectGrouped(group_by, sum_by, TableName);
